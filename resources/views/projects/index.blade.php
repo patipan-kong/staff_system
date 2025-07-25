@@ -16,9 +16,14 @@
     <div class="row">
         @foreach($projects as $project)
         <div class="col-md-6 col-lg-4 mb-4">
-            <div class="card h-100">
+            <div class="card h-100" style="border-left: 4px solid {{ $project->color ?? '#007bff' }};">
                 <div class="card-header d-flex justify-content-between align-items-center">
-                    <h5 class="mb-0">{{ $project->name }}</h5>
+                    <h5 class="mb-0 d-flex align-items-center">
+                        @if($project->icon)
+                            <i class="{{ $project->icon }} me-2" style="color: {{ $project->color ?? '#007bff' }};"></i>
+                        @endif
+                        {{ $project->name }}
+                    </h5>
                     <div class="d-flex gap-1">
                         @php
                             $statusClasses = [
@@ -98,18 +103,20 @@
                         </div>
                     @endif
 
-                    @if($project->start_date || $project->end_date)
+                    @if($project->po_date || $project->due_date || $project->on_production_date)
                         <div class="mb-3">
                             <small class="text-muted">Timeline:</small><br>
                             <small>
-                                @if($project->start_date)
-                                    <i class="fas fa-play text-success"></i> {{ $project->start_date->format('M j, Y') }}
+                                @if($project->po_date)
+                                    <i class="fas fa-file-contract text-info"></i> PO: {{ $project->po_date->format('M j') }}
                                 @endif
-                                @if($project->start_date && $project->end_date)
-                                    -
+                                @if($project->due_date)
+                                    @if($project->po_date || $project->on_production_date)<br>@endif
+                                    <i class="fas fa-flag text-danger"></i> Due: {{ $project->due_date->format('M j') }}
                                 @endif
-                                @if($project->end_date)
-                                    <i class="fas fa-flag text-danger"></i> {{ $project->end_date->format('M j, Y') }}
+                                @if($project->on_production_date)
+                                    @if($project->po_date)<br>@endif
+                                    <i class="fas fa-cog text-success"></i> Prod: {{ $project->on_production_date->format('M j') }}
                                 @endif
                             </small>
                         </div>

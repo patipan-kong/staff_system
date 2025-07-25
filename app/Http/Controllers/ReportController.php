@@ -39,7 +39,7 @@ class ReportController extends Controller
         $timesheets = collect();
         foreach ($timesheetsRaw as $timesheet) {
             $userId = $timesheet->user_id;
-            $dateStr = $timesheet->date instanceof \Carbon\Carbon ? $timesheet->date->format('Y-m-d') : $timesheet->date;
+            $dateStr = $timesheet->date instanceof Carbon ? $timesheet->date->format('Y-m-d') : $timesheet->date;
             
             if (!$timesheets->has($userId)) {
                 $timesheets->put($userId, collect());

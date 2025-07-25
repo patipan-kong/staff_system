@@ -27,6 +27,9 @@
                     @endif
                     
                     <h5 class="card-title">{{ $user->name }}</h5>
+                    @if($user->nickname)
+                        <p class="text-muted mb-1 small">"{{ $user->nickname }}"</p>
+                    @endif
                     <p class="text-muted">{{ $user->position ?? 'Staff' }}</p>
                     
                     @if($user->department ?? false)

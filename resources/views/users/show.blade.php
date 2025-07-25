@@ -30,6 +30,9 @@
                 @endif
                 
                 <h4>{{ $user->name }}</h4>
+                @if($user->nickname)
+                    <p class="text-muted mb-1">"{{ $user->nickname }}"</p>
+                @endif
                 <p class="text-muted">{{ $user->position ?? 'Staff' }}</p>
                 
                 @if($user->department ?? false)
@@ -98,12 +101,21 @@
                         ${{ number_format($user->salary, 2) }}
                     </div>
                 @endif
+                @if($user->vacation_quota !== null)
+                    <div class="mb-2">
+                        <strong>Annual Vacation Days:</strong><br>
+                        <i class="fas fa-calendar-alt text-muted me-2"></i>
+                        {{ $user->vacation_quota }} days per year
+                    </div>
+                @endif
                 <div class="mb-2">
                     <strong>Status:</strong><br>
                     <span class="badge bg-success">Active</span>
                 </div>
             </div>
         </div>
+
+        
     </div>
 
     <div class="col-md-8">
@@ -183,7 +195,81 @@
             </div>
         </div>
         @endif
+<!-- Leave Summary for Current Year -->
+        <div class="card mt-3">
+            <div class="card-header">
+                <h6 class="mb-0"><i class="fas fa-calendar-times"></i> Leave Summary {{ $currentYear }}</h6>
+            </div>
+            <div class="card-body">
+                <div class="row g-3">
+                    @php
+                        $leaveTypes = [
+                            'vacation' => ['name' => 'Vacation', 'icon' => 'fas fa-umbrella-beach', 'color' => 'primary'],
+                            'personal' => ['name' => 'Personal', 'icon' => 'fas fa-user-clock', 'color' => 'info'],
+                            'sick' => ['name' => 'Sick Leave', 'icon' => 'fas fa-thermometer-half', 'color' => 'warning'],
+                            'sick_with_certificate' => ['name' => 'Sick (w/ Certificate)', 'icon' => 'fas fa-file-medical', 'color' => 'danger']
+                        ];
+                    @endphp
 
+                    @foreach($leaveTypes as $type => $config)
+                        @if(isset($leaveSummary[$type]))
+                            <div class="col-md-6 col-lg-3">
+                                <div class="card border-{{ $config['color'] }} h-100">
+                                    <div class="card-header bg-{{ $config['color'] }} text-white text-center py-2">
+                                        <i class="{{ $config['icon'] }} me-2"></i>
+                                        <small class="fw-bold">{{ $config['name'] }}</small>
+                                    </div>
+                                    <div class="card-body p-3">
+                                        <div class="d-flex justify-content-between align-items-center mb-2">
+                                            <span class="small fw-bold">Quota:</span>
+                                            <span class="badge bg-secondary">{{ $leaveSummary[$type]['quota'] }} days</span>
+                                        </div>
+                                        <div class="d-flex justify-content-between align-items-center mb-2">
+                                            <span class="small">Used (Approved):</span>
+                                            <span class="badge bg-success">{{ number_format($leaveSummary[$type]['approved'], 1) }} days</span>
+                                        </div>
+                                        <div class="d-flex justify-content-between align-items-center mb-2">
+                                            <span class="small">Used (Pending):</span>
+                                            <span class="badge bg-warning">{{ number_format($leaveSummary[$type]['pending'], 1) }} days</span>
+                                        </div>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <span class="small fw-bold">Remain:</span>
+                                            <span class="badge bg-{{ $config['color'] }}">{{ number_format($leaveSummary[$type]['remain'], 1) }} days</span>
+                                        </div>
+                                        
+                                        <!-- Progress bar -->
+                                        @php
+                                            $used = $leaveSummary[$type]['approved'] + $leaveSummary[$type]['pending'];
+                                            $quota = $leaveSummary[$type]['quota'];
+                                            $percentage = $quota > 0 ? min(100, ($used / $quota) * 100) : 0;
+                                        @endphp
+                                        <div class="mt-3">
+                                            <div class="progress" style="height: 6px;">
+                                                <div class="progress-bar bg-{{ $config['color'] }}" 
+                                                     style="width: {{ $percentage }}%"
+                                                     title="Used: {{ number_format($percentage, 1) }}%"></div>
+                                            </div>
+                                            <small class="text-muted">{{ number_format($percentage, 1) }}% used</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
+                    @endforeach
+                </div>
+                
+                @if($user->vacation_quota !== null && ($leaveSummary['vacation']['quota'] ?? 0) > 0)
+                    <div class="alert alert-info mt-3 mb-0">
+                        <i class="fas fa-info-circle me-2"></i>
+                        <small>
+                            <strong>Note:</strong> Vacation and Personal leave share the same quota of {{ $user->vacation_quota }} days per year.
+                            The "Remain" value shown for both represents the total remaining days from the shared quota.
+                            Sick leave (6 days) and Sick leave with certificate (30 days) have separate quotas.
+                        </small>
+                    </div>
+                @endif
+            </div>
+        </div>
         <!-- Leave Requests -->
         @if($user->leaves && $user->leaves->count() > 0)
         <div class="card">

@@ -31,10 +31,32 @@
                         </div>
 
                         <div class="col-md-6 mb-3">
+                            <label for="nickname" class="form-label">Nickname</label>
+                            <input type="text" class="form-control @error('nickname') is-invalid @enderror" 
+                                   id="nickname" name="nickname" value="{{ old('nickname') }}">
+                            <small class="form-text text-muted">Optional preferred name or nickname</small>
+                            @error('nickname')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
                             <label for="email" class="form-label">Email Address <span class="text-danger">*</span></label>
                             <input type="email" class="form-control @error('email') is-invalid @enderror" 
                                    id="email" name="email" value="{{ old('email') }}" required>
                             @error('email')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="vacation_quota" class="form-label">Annual Vacation Days</label>
+                            <input type="number" min="0" max="365" class="form-control @error('vacation_quota') is-invalid @enderror" 
+                                   id="vacation_quota" name="vacation_quota" value="{{ old('vacation_quota', 20) }}">
+                            <small class="form-text text-muted">Number of vacation days per year</small>
+                            @error('vacation_quota')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>

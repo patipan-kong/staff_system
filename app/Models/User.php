@@ -14,6 +14,7 @@ class User extends Authenticatable
 
     protected $fillable = [
         'name',
+        'nickname',
         'email',
         'password',
         'role',
@@ -24,6 +25,7 @@ class User extends Authenticatable
         'hire_date',
         'phone',
         'address',
+        'vacation_quota',
     ];
 
     protected $hidden = [
@@ -92,5 +94,15 @@ class User extends Authenticatable
             case 99: return 'Admin';
             default: return 'Unknown';
         }
+    }
+
+    public function staffPlannings()
+    {
+        return $this->hasMany(StaffPlanning::class);
+    }
+
+    public function createdPlannings()
+    {
+        return $this->hasMany(StaffPlanning::class, 'created_by');
     }
 }

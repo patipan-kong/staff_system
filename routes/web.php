@@ -77,6 +77,11 @@ Route::middleware(['auth', 'manager_or_admin'])->group(function () {
     // Project Management
     Route::resource('projects', ProjectController::class)->except(['index', 'show']);
     
+    // Staff Planning
+    Route::get('/staff-planning', [App\Http\Controllers\StaffPlanningController::class, 'index'])->name('staff-planning.index');
+    Route::post('/staff-planning', [App\Http\Controllers\StaffPlanningController::class, 'store'])->name('staff-planning.store');
+    Route::delete('/staff-planning/{planning}', [App\Http\Controllers\StaffPlanningController::class, 'destroy'])->name('staff-planning.destroy');
+    
     // Leave Approval
     Route::put('/leaves/{leave}/approve', [LeaveController::class, 'approve'])->name('leaves.approve');
     Route::put('/leaves/{leave}/reject', [LeaveController::class, 'reject'])->name('leaves.reject');
@@ -115,6 +120,9 @@ Route::middleware(['auth', 'staff'])->group(function () {
     // Reports (accessible to all authenticated users)
     Route::get('/reports/weekly', [ReportController::class, 'weeklyDistribution'])->name('reports.weekly');
     Route::get('/reports/timesheet-data', [ReportController::class, 'getTimesheetData'])->name('reports.timesheet-data');
+    
+    // Whiteboard (accessible to all authenticated users)
+    Route::get('/whiteboard', [App\Http\Controllers\WhiteboardController::class, 'index'])->name('whiteboard.index');
 });
 
 

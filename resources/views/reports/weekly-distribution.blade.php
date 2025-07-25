@@ -128,7 +128,10 @@
                                             
                                             $userLeaves = $leaves[$user->id] ?? collect();
                                             $isOnLeave = $userLeaves->filter(function($leave) use ($dateStr) {
-                                                return $dateStr >= $leave->start_date && $dateStr <= $leave->end_date;
+                                                if (!$leave->start_date || !$leave->end_date) {
+                                                    return false; // Skip if dates are not set
+                                                }
+                                                return strtotime($dateStr) >= strtotime($leave->start_date) && strtotime($dateStr) <= strtotime($leave->end_date);
                                             })->count() > 0;
                                             
                                             $totalHours = $userTimesheets->sum(function($ts) { return $ts ? $ts->getWorkedHours() : 0; });

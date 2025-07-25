@@ -229,6 +229,90 @@
             </div>
         </div>
 
+        <!-- Leave Summary Card -->
+        <div class="card mb-3">
+            <div class="card-header">
+                <h6 class="mb-0"><i class="fas fa-chart-pie"></i> {{ $leave->getTypeLabel() }} Summary {{ $currentYear }}</h6>
+            </div>
+            <div class="card-body">
+                @php
+                    $leaveTypeConfig = [
+                        'vacation' => ['color' => 'primary', 'icon' => 'fas fa-umbrella-beach'],
+                        'personal' => ['color' => 'info', 'icon' => 'fas fa-user-clock'],
+                        'sick' => ['color' => 'warning', 'icon' => 'fas fa-thermometer-half'],
+                        'sick_with_certificate' => ['color' => 'danger', 'icon' => 'fas fa-file-medical']
+                    ];
+                    $config = $leaveTypeConfig[$leave->type] ?? ['color' => 'secondary', 'icon' => 'fas fa-calendar'];
+                    $summary = $leaveSummary[$leave->type] ?? null;
+                @endphp
+                
+                @if($summary)
+                    <div class="text-center mb-3">
+                        <i class="{{ $config['icon'] }} fa-2x text-{{ $config['color'] }}"></i>
+                    </div>
+                    
+                    <div class="row g-2">
+                        <div class="col-6">
+                            <div class="d-flex justify-content-between align-items-center p-2 bg-light rounded">
+                                <span class="small fw-bold">Quota:</span>
+                                <span class="badge bg-secondary">{{ $summary['quota'] }} days</span>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="d-flex justify-content-between align-items-center p-2 bg-light rounded">
+                                <span class="small">Used (Approved):</span>
+                                <span class="badge bg-success">{{ number_format($summary['approved'], 1) }} days</span>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="d-flex justify-content-between align-items-center p-2 bg-light rounded">
+                                <span class="small">Used (Pending):</span>
+                                <span class="badge bg-warning">{{ number_format($summary['pending'], 1) }} days</span>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="d-flex justify-content-between align-items-center p-2 bg-light rounded">
+                                <span class="small fw-bold">Remain:</span>
+                                <span class="badge bg-{{ $config['color'] }}">{{ number_format($summary['remain'], 1) }} days</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Progress bar -->
+                    @php
+                        $used = $summary['approved'] + $summary['pending'];
+                        $quota = $summary['quota'];
+                        $percentage = $quota > 0 ? min(100, ($used / $quota) * 100) : 0;
+                    @endphp
+                    <div class="mt-3">
+                        <div class="d-flex justify-content-between align-items-center mb-1">
+                            <small class="text-muted">Usage</small>
+                            <small class="text-muted">{{ number_format($percentage, 1) }}%</small>
+                        </div>
+                        <div class="progress" style="height: 8px;">
+                            <div class="progress-bar bg-{{ $config['color'] }}" 
+                                 style="width: {{ $percentage }}%"
+                                 title="Used: {{ number_format($percentage, 1) }}%"></div>
+                        </div>
+                    </div>
+                    
+                    @if(in_array($leave->type, ['vacation', 'personal']) && $summary['quota'] > 0)
+                        <div class="alert alert-info mt-3 mb-0 py-2">
+                            <small>
+                                <i class="fas fa-info-circle me-1"></i>
+                                Vacation and Personal leave share a {{ $summary['quota'] }}-day quota.
+                            </small>
+                        </div>
+                    @endif
+                @else
+                    <div class="text-center text-muted">
+                        <i class="fas fa-chart-pie fa-2x mb-2"></i>
+                        <p class="small mb-0">No quota information available</p>
+                    </div>
+                @endif
+            </div>
+        </div>
+
         <!-- Quick Actions Card -->
         <div class="card mb-3">
             <div class="card-header">

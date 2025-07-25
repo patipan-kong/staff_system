@@ -23,10 +23,15 @@
 <div class="row">
     <div class="col-md-8">
         <!-- Project Info Card -->
-        <div class="card mb-4">
-            <div class="card-header bg-primary text-white">
+        <div class="card mb-4" style="border-left: 4px solid {{ $project->color ?? '#007bff' }};">
+            <div class="card-header text-white" style="background-color: {{ $project->color ?? '#007bff' }};">
                 <div class="d-flex justify-content-between align-items-center">
-                    <h4 class="mb-0">{{ $project->name }}</h4>
+                    <h4 class="mb-0 d-flex align-items-center">
+                        @if($project->icon)
+                            <i class="{{ $project->icon }} me-2"></i>
+                        @endif
+                        {{ $project->name }}
+                    </h4>
                     <div class="d-flex gap-2">
                         @php
                             $statusClasses = [
@@ -68,26 +73,36 @@
                     @endif
                 </div>
 
-                @if($project->start_date || $project->end_date)
+                @if($project->po_date || $project->due_date || $project->on_production_date)
                 <div class="row">
-                    <div class="col-md-6">
-                        <h6 class="text-muted">Start Date</h6>
+                    <div class="col-md-4">
+                        <h6 class="text-muted">PO Date</h6>
                         <p>
-                            @if($project->start_date)
-                                <i class="fas fa-calendar text-success"></i> {{ $project->start_date->format('F j, Y') }}
+                            @if($project->po_date)
+                                <i class="fas fa-calendar text-info"></i> {{ $project->po_date->format('F j, Y') }}
                             @else
                                 <span class="text-muted">Not set</span>
                             @endif
                         </p>
                     </div>
-                    <div class="col-md-6">
-                        <h6 class="text-muted">End Date</h6>
+                    <div class="col-md-4">
+                        <h6 class="text-muted">Due Date</h6>
                         <p>
-                            @if($project->end_date)
-                                <i class="fas fa-calendar text-danger"></i> {{ $project->end_date->format('F j, Y') }}
-                                @if($project->end_date->isPast() && $project->status !== 'completed')
+                            @if($project->due_date)
+                                <i class="fas fa-calendar text-danger"></i> {{ $project->due_date->format('F j, Y') }}
+                                @if($project->due_date->isPast() && $project->status !== 'completed')
                                     <span class="badge bg-danger ms-2">Overdue</span>
                                 @endif
+                            @else
+                                <span class="text-muted">Not set</span>
+                            @endif
+                        </p>
+                    </div>
+                    <div class="col-md-4">
+                        <h6 class="text-muted">On Production Date</h6>
+                        <p>
+                            @if($project->on_production_date)
+                                <i class="fas fa-calendar text-success"></i> {{ $project->on_production_date->format('F j, Y') }}
                             @else
                                 <span class="text-muted">Not set</span>
                             @endif
@@ -106,21 +121,38 @@
             </div>
             <div class="card-body">
                 <div class="row">
-                    @foreach($project->users as $user)
+                    @foreach($project->projectAssigns as $assignment)
                     <div class="col-md-6 mb-3">
-                        <div class="d-flex align-items-center">
-                            @if($user->photo)
-                                <img src="{{ Storage::url($user->photo) }}" alt="Profile" class="rounded-circle me-3" width="40" height="40">
-                            @else
-                                <div class="rounded-circle bg-secondary d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px;">
-                                    <i class="fas fa-user text-white"></i>
+                        <div class="card border">
+                            <div class="card-body p-3">
+                                <div class="d-flex align-items-center">
+                                    @if($assignment->user->photo)
+                                        <img src="{{ Storage::url($assignment->user->photo) }}" alt="Profile" class="rounded-circle me-3" width="40" height="40">
+                                    @else
+                                        <div class="rounded-circle bg-secondary d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px;">
+                                            <i class="fas fa-user text-white"></i>
+                                        </div>
+                                    @endif
+                                    <div class="flex-grow-1">
+                                        <h6 class="mb-1">{{ $assignment->user->name }}</h6>
+                                        <small class="text-muted">{{ $assignment->user->position ?? 'Staff' }}</small>
+                                        @if($assignment->user->department)
+                                            <br><small class="text-info">{{ $assignment->user->department->name }}</small>
+                                        @endif
+                                    </div>
+                                    @if($assignment->estimated_hours)
+                                        <div class="text-end">
+                                            <div class="badge bg-primary">
+                                                {{ $assignment->estimated_hours }}h
+                                            </div>
+                                            <br><small class="text-muted">estimated</small>
+                                        </div>
+                                    @endif
                                 </div>
-                            @endif
-                            <div>
-                                <h6 class="mb-0">{{ $user->name }}</h6>
-                                <small class="text-muted">{{ $user->position ?? 'Staff' }}</small>
-                                @if($user->department)
-                                    <br><small class="text-info">{{ $user->department->name }}</small>
+                                @if($assignment->assigned_date)
+                                    <small class="text-muted">
+                                        <i class="fas fa-calendar"></i> Assigned: {{ $assignment->assigned_date->format('M j, Y') }}
+                                    </small>
                                 @endif
                             </div>
                         </div>
@@ -182,13 +214,17 @@
             </div>
             <div class="card-body">
                 <div class="row text-center">
-                    <div class="col-6 border-end">
+                    <div class="col-4 border-end">
                         <h4 class="text-primary mb-0">{{ number_format($totalHours, 1) }}</h4>
                         <small class="text-muted">Hours Logged</small>
                     </div>
-                    <div class="col-6">
+                    <div class="col-4 border-end">
                         <h4 class="text-info mb-0">{{ $project->estimated_hours ?? '--' }}</h4>
-                        <small class="text-muted">Estimated</small>
+                        <small class="text-muted">Project Est.</small>
+                    </div>
+                    <div class="col-4">
+                        <h4 class="text-success mb-0">{{ number_format($project->getTotalEstimatedHours(), 1) }}</h4>
+                        <small class="text-muted">Team Est.</small>
                     </div>
                 </div>
                 
@@ -248,29 +284,38 @@
         </div>
 
         <!-- Project Timeline Card -->
-        @if($project->start_date || $project->end_date)
+        @if($project->po_date || $project->due_date || $project->on_production_date)
         <div class="card">
             <div class="card-header">
                 <h6 class="mb-0"><i class="fas fa-calendar-alt"></i> Timeline</h6>
             </div>
             <div class="card-body">
-                @if($project->start_date)
+                @if($project->po_date)
                     <div class="d-flex align-items-center mb-2">
-                        <i class="fas fa-play text-success me-2"></i>
+                        <i class="fas fa-file-contract text-info me-2"></i>
                         <div>
-                            <strong>Started:</strong><br>
-                            <small>{{ $project->start_date->format('F j, Y') }}</small>
+                            <strong>PO Date:</strong><br>
+                            <small>{{ $project->po_date->format('F j, Y') }}</small>
                         </div>
                     </div>
                 @endif
-                @if($project->end_date)
-                    <div class="d-flex align-items-center">
-                        <i class="fas fa-flag {{ $project->end_date->isPast() && $project->status !== 'completed' ? 'text-danger' : 'text-primary' }} me-2"></i>
+                @if($project->on_production_date)
+                    <div class="d-flex align-items-center mb-2">
+                        <i class="fas fa-cog text-success me-2"></i>
                         <div>
-                            <strong>{{ $project->end_date->isPast() && $project->status !== 'completed' ? 'Overdue:' : 'Due:' }}</strong><br>
-                            <small>{{ $project->end_date->format('F j, Y') }}</small>
-                            @if($project->end_date->isFuture())
-                                <br><small class="text-muted">{{ $project->end_date->diffForHumans() }}</small>
+                            <strong>On Production:</strong><br>
+                            <small>{{ $project->on_production_date->format('F j, Y') }}</small>
+                        </div>
+                    </div>
+                @endif
+                @if($project->due_date)
+                    <div class="d-flex align-items-center">
+                        <i class="fas fa-flag {{ $project->due_date->isPast() && $project->status !== 'completed' ? 'text-danger' : 'text-primary' }} me-2"></i>
+                        <div>
+                            <strong>{{ $project->due_date->isPast() && $project->status !== 'completed' ? 'Overdue:' : 'Due:' }}</strong><br>
+                            <small>{{ $project->due_date->format('F j, Y') }}</small>
+                            @if($project->due_date->isFuture())
+                                <br><small class="text-muted">{{ $project->due_date->diffForHumans() }}</small>
                             @endif
                         </div>
                     </div>

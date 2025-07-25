@@ -43,22 +43,29 @@ class ProjectController extends Controller
             'group_project_id' => 'required|exists:group_projects,id',
             'estimated_hours' => 'nullable|numeric|min:0',
             'budget' => 'nullable|numeric|min:0',
-            'start_date' => 'nullable|date',
-            'end_date' => 'nullable|date|after_or_equal:start_date',
+            'po_date' => 'nullable|date',
+            'due_date' => 'nullable|date|after_or_equal:po_date',
+            'on_production_date' => 'nullable|date',
             'priority' => 'required|in:low,medium,high',
             'status' => 'required|in:planning,active,on_hold,completed',
+            'icon' => 'nullable|string|max:50',
+            'color' => 'nullable|string|max:7|regex:/^#[0-9A-Fa-f]{6}$/',
             'assigned_users' => 'array',
             'assigned_users.*' => 'exists:users,id',
+            'user_estimated_hours' => 'array',
+            'user_estimated_hours.*' => 'nullable|numeric|min:0',
         ]);
 
-        $project = Project::create($request->except('assigned_users'));
+        $project = Project::create($request->except(['assigned_users', 'user_estimated_hours']));
 
         if ($request->has('assigned_users')) {
             foreach ($request->assigned_users as $userId) {
+                $estimatedHours = $request->user_estimated_hours[$userId] ?? null;
                 ProjectAssign::create([
                     'project_id' => $project->id,
                     'user_id' => $userId,
                     'assigned_date' => now(),
+                    'estimated_hours' => $estimatedHours,
                 ]);
             }
         }
@@ -90,7 +97,14 @@ class ProjectController extends Controller
         $users = User::all();
         $assignedUsers = $project->users->pluck('id')->toArray();
         
-        return view('projects.edit', compact('project', 'groupProjects', 'users', 'assignedUsers'));
+        // Get estimated hours for each assigned user
+        $userEstimatedHours = [];
+        $projectAssigns = $project->projectAssigns()->with('user')->get();
+        foreach ($projectAssigns as $assign) {
+            $userEstimatedHours[$assign->user_id] = $assign->estimated_hours;
+        }
+        
+        return view('projects.edit', compact('project', 'groupProjects', 'users', 'assignedUsers', 'userEstimatedHours'));
     }
 
     public function update(Request $request, Project $project)
@@ -103,25 +117,32 @@ class ProjectController extends Controller
             'group_project_id' => 'required|exists:group_projects,id',
             'estimated_hours' => 'nullable|numeric|min:0',
             'budget' => 'nullable|numeric|min:0',
-            'start_date' => 'nullable|date',
-            'end_date' => 'nullable|date|after_or_equal:start_date',
+            'po_date' => 'nullable|date',
+            'due_date' => 'nullable|date|after_or_equal:po_date',
+            'on_production_date' => 'nullable|date',
             'priority' => 'required|in:low,medium,high',
             'status' => 'required|in:planning,active,on_hold,completed',
+            'icon' => 'nullable|string|max:50',
+            'color' => 'nullable|string|max:7|regex:/^#[0-9A-Fa-f]{6}$/',
             'assigned_users' => 'array',
             'assigned_users.*' => 'exists:users,id',
+            'user_estimated_hours' => 'array',
+            'user_estimated_hours.*' => 'nullable|numeric|min:0',
         ]);
 
-        $project->update($request->except('assigned_users'));
+        $project->update($request->except(['assigned_users', 'user_estimated_hours']));
 
         // Update project assignments
         ProjectAssign::where('project_id', $project->id)->delete();
         
         if ($request->has('assigned_users')) {
             foreach ($request->assigned_users as $userId) {
+                $estimatedHours = $request->user_estimated_hours[$userId] ?? null;
                 ProjectAssign::create([
                     'project_id' => $project->id,
                     'user_id' => $userId,
                     'assigned_date' => now(),
+                    'estimated_hours' => $estimatedHours,
                 ]);
             }
         }

@@ -51,6 +51,11 @@
                             <i class="fas fa-chart-bar"></i> Weekly Report
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('whiteboard.index') }}">
+                            <i class="fas fa-chalkboard"></i> Whiteboard
+                        </a>
+                    </li>
                     
                     @if(auth()->user()->isManagerOrAdmin())
                         <li class="nav-item dropdown">
@@ -60,6 +65,9 @@
                             <ul class="dropdown-menu">
                                 <li><a class="dropdown-item" href="{{ route('users.index') }}">
                                     <i class="fas fa-users"></i> Users
+                                </a></li>
+                                <li><a class="dropdown-item" href="{{ route('staff-planning.index') }}">
+                                    <i class="fas fa-calendar-alt"></i> Staff Planning
                                 </a></li>
                                 @if(auth()->user()->isAdmin())
                                     <li><hr class="dropdown-divider"></li>

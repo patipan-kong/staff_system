@@ -65,7 +65,7 @@
                     </div>
 
                     <div class="row mb-3">
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <label for="priority" class="form-label">Priority <span class="text-danger">*</span></label>
                             <select name="priority" id="priority" class="form-select @error('priority') is-invalid @enderror" required>
                                 <option value="">Select priority</option>
@@ -77,7 +77,7 @@
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <label for="status" class="form-label">Status <span class="text-danger">*</span></label>
                             <select name="status" id="status" class="form-select @error('status') is-invalid @enderror" required>
                                 <option value="">Select status</option>
@@ -90,6 +90,41 @@
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
+                        <div class="col-md-3">
+                            <label for="icon" class="form-label">Icon</label>
+                            <select name="icon" id="icon" class="form-select @error('icon') is-invalid @enderror">
+                                <option value="">Select icon</option>
+                                <option value="fas fa-laptop-code" {{ old('icon', $project->icon) == 'fas fa-laptop-code' ? 'selected' : '' }}>💻 Development</option>
+                                <option value="fas fa-paint-brush" {{ old('icon', $project->icon) == 'fas fa-paint-brush' ? 'selected' : '' }}>🎨 Design</option>
+                                <option value="fas fa-chart-line" {{ old('icon', $project->icon) == 'fas fa-chart-line' ? 'selected' : '' }}>📊 Analytics</option>
+                                <option value="fas fa-mobile-alt" {{ old('icon', $project->icon) == 'fas fa-mobile-alt' ? 'selected' : '' }}>📱 Mobile</option>
+                                <option value="fas fa-server" {{ old('icon', $project->icon) == 'fas fa-server' ? 'selected' : '' }}>🖥️ Server</option>
+                                <option value="fas fa-database" {{ old('icon', $project->icon) == 'fas fa-database' ? 'selected' : '' }}>🗄️ Database</option>
+                                <option value="fas fa-shield-alt" {{ old('icon', $project->icon) == 'fas fa-shield-alt' ? 'selected' : '' }}>🛡️ Security</option>
+                                <option value="fas fa-cogs" {{ old('icon', $project->icon) == 'fas fa-cogs' ? 'selected' : '' }}>⚙️ System</option>
+                                <option value="fas fa-rocket" {{ old('icon', $project->icon) == 'fas fa-rocket' ? 'selected' : '' }}>🚀 Launch</option>
+                                <option value="fas fa-bug" {{ old('icon', $project->icon) == 'fas fa-bug' ? 'selected' : '' }}>🐛 Bug Fix</option>
+                            </select>
+                            @error('icon')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+                        <div class="col-md-3">
+                            <label for="color" class="form-label">Color</label>
+                            <div class="input-group">
+                                <input type="color" name="color" id="color" 
+                                       class="form-control form-control-color @error('color') is-invalid @enderror" 
+                                       value="{{ old('color', $project->color ?? '#007bff') }}" title="Choose project color">
+                                <input type="text" class="form-control" id="color-text" 
+                                       value="{{ old('color', $project->color ?? '#007bff') }}" placeholder="#007bff" readonly>
+                            </div>
+                            @error('color')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
                         <div class="col-md-4">
                             <label for="estimated_hours" class="form-label">Estimated Hours</label>
                             <input type="number" name="estimated_hours" id="estimated_hours" 
@@ -112,20 +147,32 @@
                             @enderror
                         </div>
                         <div class="col-md-4">
-                            <label for="start_date" class="form-label">Start Date</label>
-                            <input type="date" name="start_date" id="start_date" 
-                                   class="form-control @error('start_date') is-invalid @enderror" 
-                                   value="{{ old('start_date', $project->start_date->format('Y-m-d')) }}">
-                            @error('start_date')
+                            <label for="po_date" class="form-label">PO Date</label>
+                            <input type="date" name="po_date" id="po_date" 
+                                   class="form-control @error('po_date') is-invalid @enderror" 
+                                   value="{{ old('po_date', $project->po_date ? $project->po_date->format('Y-m-d') : '') }}">
+                            @error('po_date')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
                         <div class="col-md-4">
-                            <label for="end_date" class="form-label">End Date</label>
-                            <input type="date" name="end_date" id="end_date" 
-                                   class="form-control @error('end_date') is-invalid @enderror" 
-                                   value="{{ old('end_date', $project->end_date->format('Y-m-d')) }}">
-                            @error('end_date')
+                            <label for="due_date" class="form-label">Due Date</label>
+                            <input type="date" name="due_date" id="due_date" 
+                                   class="form-control @error('due_date') is-invalid @enderror" 
+                                   value="{{ old('due_date', $project->due_date ? $project->due_date->format('Y-m-d') : '') }}">
+                            @error('due_date')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <label for="on_production_date" class="form-label">On Production Date</label>
+                            <input type="date" name="on_production_date" id="on_production_date" 
+                                   class="form-control @error('on_production_date') is-invalid @enderror" 
+                                   value="{{ old('on_production_date', $project->on_production_date ? $project->on_production_date->format('Y-m-d') : '') }}">
+                            @error('on_production_date')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
@@ -137,22 +184,42 @@
                             <div class="card-body">
                                 <div class="row">
                                     @foreach($users as $user)
-                                    <div class="col-md-6 col-lg-4 mb-2">
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" name="assigned_users[]" 
-                                                   value="{{ $user->id }}" id="user_{{ $user->id }}"
-                                                   {{ in_array($user->id, old('assigned_users', $assignedUsers)) ? 'checked' : '' }}>
-                                            <label class="form-check-label d-flex align-items-center" for="user_{{ $user->id }}">
-                                                @if($user->photo)
-                                                    <img src="{{ Storage::url($user->photo) }}" alt="Profile" class="rounded-circle me-2" width="24" height="24">
-                                                @else
-                                                    <i class="fas fa-user-circle me-2"></i>
-                                                @endif
-                                                <div>
-                                                    <div>{{ $user->name }}</div>
-                                                    <small class="text-muted">{{ $user->position ?? 'Staff' }}</small>
+                                    <div class="col-md-6 col-lg-4 mb-3">
+                                        <div class="card">
+                                            <div class="card-body p-2">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" name="assigned_users[]" 
+                                                           value="{{ $user->id }}" id="user_{{ $user->id }}"
+                                                           {{ in_array($user->id, old('assigned_users', $assignedUsers)) ? 'checked' : '' }}>
+                                                    <label class="form-check-label d-flex align-items-center" for="user_{{ $user->id }}">
+                                                        @if($user->photo)
+                                                            <img src="{{ Storage::url($user->photo) }}" alt="Profile" class="rounded-circle me-2" width="24" height="24">
+                                                        @else
+                                                            <i class="fas fa-user-circle me-2"></i>
+                                                        @endif
+                                                        <div>
+                                                            <div class="fw-bold">{{ $user->name }}</div>
+                                                            <small class="text-muted">{{ $user->position ?? 'Staff' }}</small>
+                                                        </div>
+                                                    </label>
                                                 </div>
-                                            </label>
+                                                <div class="mt-2 user-hours-input" id="hours_input_{{ $user->id }}" 
+                                                     style="display: {{ in_array($user->id, $assignedUsers) ? 'block' : 'none' }};">
+                                                    <label for="hours_{{ $user->id }}" class="form-label text-muted small">Estimated Hours</label>
+                                                    <input type="number" class="form-control form-control-sm estimated-hours" 
+                                                           id="hours_{{ $user->id }}" name="user_estimated_hours[{{ $user->id }}]" 
+                                                           value="{{ old('user_estimated_hours.'.$user->id, $userEstimatedHours[$user->id] ?? '') }}" 
+                                                           min="0" step="0.5" placeholder="0.0"
+                                                           data-user-id="{{ $user->id }}"
+                                                           data-salary="{{ $user->salary ?? 0 }}">
+                                                    <div class="estimated-cost mt-1" id="cost_{{ $user->id }}" style="display: none;">
+                                                        <small class="text-success">
+                                                            <i class="fas fa-dollar-sign"></i>
+                                                            Estimated Cost: <span class="fw-bold cost-amount">$0.00</span>
+                                                        </small>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                     @endforeach
@@ -171,13 +238,17 @@
                         <div class="card-body">
                             <h6 class="card-title mb-2"><i class="fas fa-info-circle"></i> Project Summary</h6>
                             <div class="row">
-                                <div class="col-md-6">
+                                <div class="col-md-4">
                                     <small class="text-muted">Selected Team Members:</small>
                                     <div id="selected-members" class="fw-bold">None selected</div>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-4">
                                     <small class="text-muted">Timeline:</small>
                                     <div id="project-timeline" class="fw-bold">Not set</div>
+                                </div>
+                                <div class="col-md-4">
+                                    <small class="text-muted">Total Estimated Cost:</small>
+                                    <div id="total-estimated-cost" class="fw-bold text-success">$0.00</div>
                                 </div>
                             </div>
                         </div>
@@ -214,17 +285,97 @@
 document.addEventListener('DOMContentLoaded', function() {
     const userCheckboxes = document.querySelectorAll('input[name="assigned_users[]"]');
     const selectedMembersDiv = document.getElementById('selected-members');
-    const startDateInput = document.getElementById('start_date');
-    const endDateInput = document.getElementById('end_date');
+    const poDateInput = document.getElementById('po_date');
+    const dueDateInput = document.getElementById('due_date');
     const timelineDiv = document.getElementById('project-timeline');
+    const totalCostDiv = document.getElementById('total-estimated-cost');
+    const estimatedHoursInputs = document.querySelectorAll('.estimated-hours');
+
+    // Cost calculation function
+    function calculateHourlyCost(salary) {
+        // Formula: salary / (22 working days * 8 hours per day)
+        return salary / (22 * 8);
+    }
+
+    function updateIndividualCost(userId) {
+        const hoursInput = document.getElementById(`hours_${userId}`);
+        const costDiv = document.getElementById(`cost_${userId}`);
+        const costAmount = costDiv.querySelector('.cost-amount');
+        
+        if (!hoursInput || !costDiv || !costAmount) return;
+        
+        const hours = parseFloat(hoursInput.value) || 0;
+        const salary = parseFloat(hoursInput.dataset.salary) || 0;
+        
+        if (hours > 0 && salary > 0) {
+            const hourlyCost = calculateHourlyCost(salary);
+            const totalCost = hours * hourlyCost;
+            costAmount.textContent = `$${totalCost.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+            costDiv.style.display = 'block';
+        } else {
+            costDiv.style.display = 'none';
+        }
+        
+        updateTotalCost();
+    }
+
+    function updateTotalCost() {
+        let totalCost = 0;
+        
+        userCheckboxes.forEach(checkbox => {
+            if (checkbox.checked) {
+                const userId = checkbox.value;
+                const hoursInput = document.getElementById(`hours_${userId}`);
+                
+                if (hoursInput) {
+                    const hours = parseFloat(hoursInput.value) || 0;
+                    const salary = parseFloat(hoursInput.dataset.salary) || 0;
+                    
+                    if (hours > 0 && salary > 0) {
+                        const hourlyCost = calculateHourlyCost(salary);
+                        totalCost += hours * hourlyCost;
+                    }
+                }
+            }
+        });
+        
+        totalCostDiv.textContent = `$${totalCost.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+    }
 
     function updateSelectedMembers() {
         const selectedUsers = [];
         userCheckboxes.forEach(checkbox => {
+            const userId = checkbox.value;
+            const hoursInput = document.getElementById(`hours_input_${userId}`);
+            const costDiv = document.getElementById(`cost_${userId}`);
+            
             if (checkbox.checked) {
                 const label = document.querySelector(`label[for="${checkbox.id}"]`);
                 const userName = label.querySelector('div div').textContent;
                 selectedUsers.push(userName);
+                
+                // Show hours input
+                if (hoursInput) {
+                    hoursInput.style.display = 'block';
+                }
+                
+                // Update individual cost for this user
+                updateIndividualCost(userId);
+            } else {
+                // Hide hours input and clear value
+                if (hoursInput) {
+                    hoursInput.style.display = 'none';
+                    const hoursField = document.getElementById(`hours_${userId}`);
+                    if (hoursField) {
+                        hoursField.value = '';
+                        updateIndividualCost(userId);
+                    }
+                }
+                
+                // Hide cost display
+                if (costDiv) {
+                    costDiv.style.display = 'none';
+                }
             }
         });
 
@@ -235,21 +386,23 @@ document.addEventListener('DOMContentLoaded', function() {
         } else {
             selectedMembersDiv.textContent = `${selectedUsers.slice(0, 3).join(', ')} +${selectedUsers.length - 3} more`;
         }
+        
+        updateTotalCost();
     }
 
     function updateTimeline() {
-        const startDate = startDateInput.value;
-        const endDate = endDateInput.value;
+        const poDate = poDateInput.value;
+        const dueDate = dueDateInput.value;
 
-        if (!startDate && !endDate) {
+        if (!poDate && !dueDate) {
             timelineDiv.textContent = 'Not set';
-        } else if (startDate && !endDate) {
-            timelineDiv.textContent = `Starts ${new Date(startDate).toLocaleDateString()}`;
-        } else if (!startDate && endDate) {
-            timelineDiv.textContent = `Due ${new Date(endDate).toLocaleDateString()}`;
+        } else if (poDate && !dueDate) {
+            timelineDiv.textContent = `PO Date: ${new Date(poDate).toLocaleDateString()}`;
+        } else if (!poDate && dueDate) {
+            timelineDiv.textContent = `Due ${new Date(dueDate).toLocaleDateString()}`;
         } else {
-            const start = new Date(startDate);
-            const end = new Date(endDate);
+            const start = new Date(poDate);
+            const end = new Date(dueDate);
             const diffTime = Math.abs(end - start);
             const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
             timelineDiv.textContent = `${start.toLocaleDateString()} - ${end.toLocaleDateString()} (${diffDays} days)`;
@@ -261,21 +414,44 @@ document.addEventListener('DOMContentLoaded', function() {
         checkbox.addEventListener('change', updateSelectedMembers);
     });
 
-    startDateInput.addEventListener('change', updateTimeline);
-    endDateInput.addEventListener('change', updateTimeline);
+    // Add event listeners for estimated hours inputs
+    estimatedHoursInputs.forEach(input => {
+        input.addEventListener('input', function() {
+            const userId = this.dataset.userId;
+            updateIndividualCost(userId);
+        });
+    });
+
+    poDateInput.addEventListener('change', updateTimeline);
+    dueDateInput.addEventListener('change', updateTimeline);
 
     // Initial updates
     updateSelectedMembers();
     updateTimeline();
+    
+    // Calculate initial costs for already assigned users
+    userCheckboxes.forEach(checkbox => {
+        if (checkbox.checked) {
+            updateIndividualCost(checkbox.value);
+        }
+    });
 
-    // Validate end date is after start date
-    endDateInput.addEventListener('change', function() {
-        const startDate = startDateInput.value;
-        const endDate = endDateInput.value;
+    // Color picker synchronization
+    const colorPicker = document.getElementById('color');
+    const colorText = document.getElementById('color-text');
+    
+    colorPicker.addEventListener('input', function() {
+        colorText.value = this.value;
+    });
+
+    // Validate due date is after PO date
+    dueDateInput.addEventListener('change', function() {
+        const poDate = poDateInput.value;
+        const dueDate = dueDateInput.value;
         
-        if (startDate && endDate && new Date(endDate) < new Date(startDate)) {
-            alert('End date cannot be before start date.');
-            endDateInput.value = '';
+        if (poDate && dueDate && new Date(dueDate) < new Date(poDate)) {
+            alert('Due date cannot be before PO date.');
+            dueDateInput.value = '';
             updateTimeline();
         }
     });

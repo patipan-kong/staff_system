@@ -17,16 +17,18 @@ class Project extends Model
         'actual_hours',
         'budget',
         'status',
-        'start_date',
-        'end_date',
+        'po_date',
+        'due_date',
+        'on_production_date',
         'priority',
         'icon',
         'color',
     ];
 
     protected $casts = [
-        'start_date' => 'date',
-        'end_date' => 'date',
+        'po_date' => 'date',
+        'due_date' => 'date',
+        'on_production_date' => 'date',
         'estimated_hours' => 'decimal:2',
         'actual_hours' => 'decimal:2',
         'budget' => 'decimal:2',
@@ -52,6 +54,11 @@ class Project extends Model
         return $this->hasMany(Timesheet::class);
     }
 
+    public function staffPlannings()
+    {
+        return $this->hasMany(StaffPlanning::class);
+    }
+
     public function getTotalCost()
     {
         return $this->timesheets->sum(function ($timesheet) {
@@ -59,6 +66,17 @@ class Project extends Model
             $hourlyRate = $timesheet->user->salary ? ($timesheet->user->salary / 160) : 0; // Assuming 160 hours per month
             return $hours * $hourlyRate;
         });
+    }
+
+    public function getTotalEstimatedHours()
+    {
+        return $this->projectAssigns->sum('estimated_hours') ?? 0;
+    }
+
+    public function getRemainingEstimatedHours()
+    {
+        $totalEstimated = $this->getTotalEstimatedHours();
+        return max(0, $totalEstimated - $this->actual_hours);
     }
 
     public function getProgress()

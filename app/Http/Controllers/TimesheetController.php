@@ -51,10 +51,31 @@ class TimesheetController extends Controller
             'attachment' => 'nullable|image|max:2048',
         ]);
 
+        // Convert times to full datetime objects for overlap checking
+        $startDateTime = Carbon::createFromFormat('Y-m-d H:i', $request->get('date') . ' ' . $request->get('start_time'));
+        $endDateTime = Carbon::createFromFormat('Y-m-d H:i', $request->get('date') . ' ' . $request->get('end_time'));
+
+        // Check for overlapping timesheets
+        if (Timesheet::hasOverlap(auth()->id(), $request->get('date'), $startDateTime, $endDateTime)) {
+            $overlapping = Timesheet::getOverlappingTimesheets(auth()->id(), $request->get('date'), $startDateTime, $endDateTime);
+            $overlapDetails = $overlapping->map(function ($timesheet) {
+                return sprintf(
+                    '%s (%s - %s)',
+                    $timesheet->project->name,
+                    $timesheet->start_time->format('H:i'),
+                    $timesheet->end_time->format('H:i')
+                );
+            })->implode(', ');
+
+            return back()->withErrors([
+                'time_overlap' => "This timesheet overlaps with existing entries: {$overlapDetails}. Please adjust your start or end time."
+            ])->withInput();
+        }
+
         $data = $request->all();
         $data['user_id'] = auth()->id();
-        $data['start_time'] = Carbon::createFromFormat('Y-m-d H:i', $request->date . ' ' . $request->start_time);
-        $data['end_time'] = Carbon::createFromFormat('Y-m-d H:i', $request->date . ' ' . $request->end_time);
+        $data['start_time'] = $startDateTime;
+        $data['end_time'] = $endDateTime;
 
         if ($request->hasFile('attachment')) {
             $data['attachment'] = $request->file('attachment')->store('timesheet_attachments', 'public');
@@ -92,13 +113,34 @@ class TimesheetController extends Controller
             'attachment' => 'nullable|image|max:2048',
         ]);
 
+        // Convert times to full datetime objects for overlap checking
+        $startDateTime = Carbon::createFromFormat('Y-m-d H:i', $request->get('date') . ' ' . $request->get('start_time'));
+        $endDateTime = Carbon::createFromFormat('Y-m-d H:i', $request->get('date') . ' ' . $request->get('end_time'));
+
+        // Check for overlapping timesheets (excluding the current one being updated)
+        if (Timesheet::hasOverlap(auth()->id(), $request->get('date'), $startDateTime, $endDateTime, $timesheet->getKey())) {
+            $overlapping = Timesheet::getOverlappingTimesheets(auth()->id(), $request->get('date'), $startDateTime, $endDateTime, $timesheet->getKey());
+            $overlapDetails = $overlapping->map(function ($ts) {
+                return sprintf(
+                    '%s (%s - %s)',
+                    $ts->project->name,
+                    $ts->start_time->format('H:i'),
+                    $ts->end_time->format('H:i')
+                );
+            })->implode(', ');
+
+            return back()->withErrors([
+                'time_overlap' => "This timesheet overlaps with existing entries: {$overlapDetails}. Please adjust your start or end time."
+            ])->withInput();
+        }
+
         $data = $request->all();
-        $data['start_time'] = Carbon::createFromFormat('Y-m-d H:i', $request->date . ' ' . $request->start_time);
-        $data['end_time'] = Carbon::createFromFormat('Y-m-d H:i', $request->date . ' ' . $request->end_time);
+        $data['start_time'] = $startDateTime;
+        $data['end_time'] = $endDateTime;
 
         if ($request->hasFile('attachment')) {
-            if ($timesheet->attachment) {
-                Storage::disk('public')->delete($timesheet->attachment);
+            if ($timesheet->getAttribute('attachment')) {
+                Storage::disk('public')->delete($timesheet->getAttribute('attachment'));
             }
             $data['attachment'] = $request->file('attachment')->store('timesheet_attachments', 'public');
         }
@@ -112,8 +154,8 @@ class TimesheetController extends Controller
     {
         $this->authorize('delete', $timesheet);
         
-        if ($timesheet->attachment) {
-            Storage::disk('public')->delete($timesheet->attachment);
+        if ($timesheet->getAttribute('attachment')) {
+            Storage::disk('public')->delete($timesheet->getAttribute('attachment'));
         }
         
         $timesheet->delete();

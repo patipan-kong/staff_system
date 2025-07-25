@@ -53,6 +53,51 @@ class Timesheet extends Model
         return ($totalMinutes - $breakMinutes) / 60;
     }
 
+    /**
+     * Check if this timesheet overlaps with any existing timesheets for the same user
+     */
+    public static function hasOverlap($userId, $date, $startTime, $endTime, $excludeId = null)
+    {
+        $query = self::where('user_id', $userId)
+            ->whereDate('date', $date)
+            ->where(function ($q) use ($startTime, $endTime) {
+                // Check for any overlap: new start is before existing end AND new end is after existing start
+                $q->where(function ($subQ) use ($startTime, $endTime) {
+                    $subQ->where('start_time', '<', $endTime)
+                         ->where('end_time', '>', $startTime);
+                });
+            });
+
+        // Exclude the current timesheet when updating
+        if ($excludeId) {
+            $query->where('id', '!=', $excludeId);
+        }
+
+        return $query->exists();
+    }
+
+    /**
+     * Get overlapping timesheets for a user on a specific date and time range
+     */
+    public static function getOverlappingTimesheets($userId, $date, $startTime, $endTime, $excludeId = null)
+    {
+        $query = self::with('project')
+            ->where('user_id', $userId)
+            ->whereDate('date', $date)
+            ->where(function ($q) use ($startTime, $endTime) {
+                $q->where(function ($subQ) use ($startTime, $endTime) {
+                    $subQ->where('start_time', '<', $endTime)
+                         ->where('end_time', '>', $startTime);
+                });
+            });
+
+        if ($excludeId) {
+            $query->where('id', '!=', $excludeId);
+        }
+
+        return $query->get();
+    }
+
     public function getWorkedTime()
     {
         $hours = $this->getWorkedHours();

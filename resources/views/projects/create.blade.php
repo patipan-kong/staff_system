@@ -55,7 +55,7 @@
                     </div>
 
                     <div class="row mb-3">
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <label for="priority" class="form-label">Priority <span class="text-danger">*</span></label>
                             <select name="priority" id="priority" class="form-select @error('priority') is-invalid @enderror" required>
                                 <option value="">Select priority</option>
@@ -67,7 +67,7 @@
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <label for="status" class="form-label">Status <span class="text-danger">*</span></label>
                             <select name="status" id="status" class="form-select @error('status') is-invalid @enderror" required>
                                 <option value="">Select status</option>
@@ -80,6 +80,41 @@
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
+                        <div class="col-md-3">
+                            <label for="icon" class="form-label">Icon</label>
+                            <select name="icon" id="icon" class="form-select @error('icon') is-invalid @enderror">
+                                <option value="">Select icon</option>
+                                <option value="fas fa-laptop-code" {{ old('icon') == 'fas fa-laptop-code' ? 'selected' : '' }}>💻 Development</option>
+                                <option value="fas fa-paint-brush" {{ old('icon') == 'fas fa-paint-brush' ? 'selected' : '' }}>🎨 Design</option>
+                                <option value="fas fa-chart-line" {{ old('icon') == 'fas fa-chart-line' ? 'selected' : '' }}>📊 Analytics</option>
+                                <option value="fas fa-mobile-alt" {{ old('icon') == 'fas fa-mobile-alt' ? 'selected' : '' }}>📱 Mobile</option>
+                                <option value="fas fa-server" {{ old('icon') == 'fas fa-server' ? 'selected' : '' }}>🖥️ Server</option>
+                                <option value="fas fa-database" {{ old('icon') == 'fas fa-database' ? 'selected' : '' }}>🗄️ Database</option>
+                                <option value="fas fa-shield-alt" {{ old('icon') == 'fas fa-shield-alt' ? 'selected' : '' }}>🛡️ Security</option>
+                                <option value="fas fa-cogs" {{ old('icon') == 'fas fa-cogs' ? 'selected' : '' }}>⚙️ System</option>
+                                <option value="fas fa-rocket" {{ old('icon') == 'fas fa-rocket' ? 'selected' : '' }}>🚀 Launch</option>
+                                <option value="fas fa-bug" {{ old('icon') == 'fas fa-bug' ? 'selected' : '' }}>🐛 Bug Fix</option>
+                            </select>
+                            @error('icon')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+                        <div class="col-md-3">
+                            <label for="color" class="form-label">Color</label>
+                            <div class="input-group">
+                                <input type="color" name="color" id="color" 
+                                       class="form-control form-control-color @error('color') is-invalid @enderror" 
+                                       value="{{ old('color', '#007bff') }}" title="Choose project color">
+                                <input type="text" class="form-control" id="color-text" 
+                                       value="{{ old('color', '#007bff') }}" placeholder="#007bff" readonly>
+                            </div>
+                            @error('color')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
                         <div class="col-md-4">
                             <label for="estimated_hours" class="form-label">Estimated Hours</label>
                             <input type="number" name="estimated_hours" id="estimated_hours" 
@@ -89,10 +124,6 @@
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
-                    </div>
-
-                    <div class="row mb-3">
-                        <div class="col-md-4">
                             <label for="budget" class="form-label">Budget ($)</label>
                             <input type="number" name="budget" id="budget" 
                                    class="form-control @error('budget') is-invalid @enderror" 
@@ -102,20 +133,32 @@
                             @enderror
                         </div>
                         <div class="col-md-4">
-                            <label for="start_date" class="form-label">Start Date</label>
-                            <input type="date" name="start_date" id="start_date" 
-                                   class="form-control @error('start_date') is-invalid @enderror" 
-                                   value="{{ old('start_date') }}">
-                            @error('start_date')
+                            <label for="po_date" class="form-label">PO Date</label>
+                            <input type="date" name="po_date" id="po_date" 
+                                   class="form-control @error('po_date') is-invalid @enderror" 
+                                   value="{{ old('po_date') }}">
+                            @error('po_date')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
                         <div class="col-md-4">
-                            <label for="end_date" class="form-label">End Date</label>
-                            <input type="date" name="end_date" id="end_date" 
-                                   class="form-control @error('end_date') is-invalid @enderror" 
-                                   value="{{ old('end_date') }}">
-                            @error('end_date')
+                            <label for="due_date" class="form-label">Due Date</label>
+                            <input type="date" name="due_date" id="due_date" 
+                                   class="form-control @error('due_date') is-invalid @enderror" 
+                                   value="{{ old('due_date') }}">
+                            @error('due_date')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <label for="on_production_date" class="form-label">On Production Date</label>
+                            <input type="date" name="on_production_date" id="on_production_date" 
+                                   class="form-control @error('on_production_date') is-invalid @enderror" 
+                                   value="{{ old('on_production_date') }}">
+                            @error('on_production_date')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
@@ -127,22 +170,33 @@
                             <div class="card-body">
                                 <div class="row">
                                     @foreach($users as $user)
-                                    <div class="col-md-6 col-lg-4 mb-2">
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" name="assigned_users[]" 
-                                                   value="{{ $user->id }}" id="user_{{ $user->id }}"
-                                                   {{ in_array($user->id, old('assigned_users', [])) ? 'checked' : '' }}>
-                                            <label class="form-check-label d-flex align-items-center" for="user_{{ $user->id }}">
-                                                @if($user->photo)
-                                                    <img src="{{ Storage::url($user->photo) }}" alt="Profile" class="rounded-circle me-2" width="24" height="24">
-                                                @else
-                                                    <i class="fas fa-user-circle me-2"></i>
-                                                @endif
-                                                <div>
-                                                    <div>{{ $user->name }}</div>
-                                                    <small class="text-muted">{{ $user->position ?? 'Staff' }}</small>
+                                    <div class="col-md-6 col-lg-4 mb-3">
+                                        <div class="card">
+                                            <div class="card-body p-2">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" name="assigned_users[]" 
+                                                           value="{{ $user->id }}" id="user_{{ $user->id }}"
+                                                           {{ in_array($user->id, old('assigned_users', [])) ? 'checked' : '' }}>
+                                                    <label class="form-check-label d-flex align-items-center" for="user_{{ $user->id }}">
+                                                        @if($user->photo)
+                                                            <img src="{{ Storage::url($user->photo) }}" alt="Profile" class="rounded-circle me-2" width="24" height="24">
+                                                        @else
+                                                            <i class="fas fa-user-circle me-2"></i>
+                                                        @endif
+                                                        <div>
+                                                            <div class="fw-bold">{{ $user->name }}</div>
+                                                            <small class="text-muted">{{ $user->position ?? 'Staff' }}</small>
+                                                        </div>
+                                                    </label>
                                                 </div>
-                                            </label>
+                                                <div class="mt-2 user-hours-input" id="hours_input_{{ $user->id }}" style="display: none;">
+                                                    <label for="hours_{{ $user->id }}" class="form-label text-muted small">Estimated Hours</label>
+                                                    <input type="number" class="form-control form-control-sm" 
+                                                           id="hours_{{ $user->id }}" name="user_estimated_hours[{{ $user->id }}]" 
+                                                           value="{{ old('user_estimated_hours.'.$user->id) }}" 
+                                                           min="0" step="0.5" placeholder="0.0">
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                     @endforeach
@@ -193,17 +247,32 @@
 document.addEventListener('DOMContentLoaded', function() {
     const userCheckboxes = document.querySelectorAll('input[name="assigned_users[]"]');
     const selectedMembersDiv = document.getElementById('selected-members');
-    const startDateInput = document.getElementById('start_date');
-    const endDateInput = document.getElementById('end_date');
+    const poDateInput = document.getElementById('po_date');
+    const dueDateInput = document.getElementById('due_date');
     const timelineDiv = document.getElementById('project-timeline');
 
     function updateSelectedMembers() {
         const selectedUsers = [];
         userCheckboxes.forEach(checkbox => {
+            const userId = checkbox.value;
+            const hoursInput = document.getElementById(`hours_input_${userId}`);
+            
             if (checkbox.checked) {
                 const label = document.querySelector(`label[for="${checkbox.id}"]`);
                 const userName = label.querySelector('div div').textContent;
                 selectedUsers.push(userName);
+                
+                // Show hours input
+                if (hoursInput) {
+                    hoursInput.style.display = 'block';
+                }
+            } else {
+                // Hide hours input and clear value
+                if (hoursInput) {
+                    hoursInput.style.display = 'none';
+                    const hoursField = document.getElementById(`hours_${userId}`);
+                    if (hoursField) hoursField.value = '';
+                }
             }
         });
 
@@ -217,18 +286,18 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function updateTimeline() {
-        const startDate = startDateInput.value;
-        const endDate = endDateInput.value;
+        const poDate = poDateInput.value;
+        const dueDate = dueDateInput.value;
 
-        if (!startDate && !endDate) {
+        if (!poDate && !dueDate) {
             timelineDiv.textContent = 'Not set';
-        } else if (startDate && !endDate) {
-            timelineDiv.textContent = `Starts ${new Date(startDate).toLocaleDateString()}`;
-        } else if (!startDate && endDate) {
-            timelineDiv.textContent = `Due ${new Date(endDate).toLocaleDateString()}`;
+        } else if (poDate && !dueDate) {
+            timelineDiv.textContent = `PO Date: ${new Date(poDate).toLocaleDateString()}`;
+        } else if (!poDate && dueDate) {
+            timelineDiv.textContent = `Due ${new Date(dueDate).toLocaleDateString()}`;
         } else {
-            const start = new Date(startDate);
-            const end = new Date(endDate);
+            const start = new Date(poDate);
+            const end = new Date(dueDate);
             const diffTime = Math.abs(end - start);
             const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
             timelineDiv.textContent = `${start.toLocaleDateString()} - ${end.toLocaleDateString()} (${diffDays} days)`;
@@ -240,21 +309,29 @@ document.addEventListener('DOMContentLoaded', function() {
         checkbox.addEventListener('change', updateSelectedMembers);
     });
 
-    startDateInput.addEventListener('change', updateTimeline);
-    endDateInput.addEventListener('change', updateTimeline);
+    poDateInput.addEventListener('change', updateTimeline);
+    dueDateInput.addEventListener('change', updateTimeline);
 
     // Initial updates
     updateSelectedMembers();
     updateTimeline();
 
-    // Validate end date is after start date
-    endDateInput.addEventListener('change', function() {
-        const startDate = startDateInput.value;
-        const endDate = endDateInput.value;
+    // Color picker synchronization
+    const colorPicker = document.getElementById('color');
+    const colorText = document.getElementById('color-text');
+    
+    colorPicker.addEventListener('input', function() {
+        colorText.value = this.value;
+    });
+
+    // Validate due date is after PO date
+    dueDateInput.addEventListener('change', function() {
+        const poDate = poDateInput.value;
+        const dueDate = dueDateInput.value;
         
-        if (startDate && endDate && new Date(endDate) < new Date(startDate)) {
-            alert('End date cannot be before start date.');
-            endDateInput.value = '';
+        if (poDate && dueDate && new Date(dueDate) < new Date(poDate)) {
+            alert('Due date cannot be before PO date.');
+            dueDateInput.value = '';
             updateTimeline();
         }
     });

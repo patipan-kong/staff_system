@@ -25,6 +25,14 @@
                 </h5>
             </div>
             <div class="card-body">
+                @if($errors->has('time_overlap'))
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <strong><i class="fas fa-exclamation-triangle"></i> Time Overlap Error!</strong>
+                        <br>{{ $errors->first('time_overlap') }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                @endif
+
                 <form action="{{ route('timesheets.update', $timesheet) }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')

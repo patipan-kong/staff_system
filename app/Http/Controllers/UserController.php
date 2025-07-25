@@ -32,6 +32,7 @@ class UserController extends Controller
 
         $request->validate([
             'name' => 'required|string|max:255',
+            'nickname' => 'nullable|string|max:100',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8|confirmed',
             'role' => 'required|integer|in:0,1,2,3,99',
@@ -42,6 +43,7 @@ class UserController extends Controller
             'phone' => 'nullable|string|max:20',
             'address' => 'nullable|string|max:500',
             'photo' => 'nullable|image|max:2048',
+            'vacation_quota' => 'nullable|integer|min:0|max:365',
         ]);
 
         $data = $request->all();
@@ -60,8 +62,13 @@ class UserController extends Controller
     {
         $this->authorize('view', $user);
         
-        $user->load('department');
-        return view('users.show', compact('user'));
+        $user->load(['department', 'projects', 'timesheets.project', 'leaves']);
+        
+        // Calculate leave summaries for current year
+        $currentYear = now()->year;
+        $leaveSummary = $this->calculateLeaveSummary($user, $currentYear);
+        
+        return view('users.show', compact('user', 'leaveSummary', 'currentYear'));
     }
 
     public function edit(User $user)
@@ -78,6 +85,7 @@ class UserController extends Controller
 
         $request->validate([
             'name' => 'required|string|max:255',
+            'nickname' => 'nullable|string|max:100',
             'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
             'password' => 'nullable|string|min:8|confirmed',
             'role' => 'required|integer|in:0,1,2,3,99',
@@ -88,6 +96,7 @@ class UserController extends Controller
             'phone' => 'nullable|string|max:20',
             'address' => 'nullable|string|max:500',
             'photo' => 'nullable|image|max:2048',
+            'vacation_quota' => 'nullable|integer|min:0|max:365',
         ]);
 
         $data = $request->except('password');
@@ -126,7 +135,75 @@ class UserController extends Controller
         $user = auth()->user();
         $user->load(['department', 'projects', 'timesheets.project', 'leaves']);
         
-        return view('users.profile', compact('user'));
+        // Calculate leave summaries for current year
+        $currentYear = now()->year;
+        $leaveSummary = $this->calculateLeaveSummary($user, $currentYear);
+        
+        return view('users.profile', compact('user', 'leaveSummary', 'currentYear'));
+    }
+
+    /**
+     * Calculate leave summary for a user in a given year
+     */
+    private function calculateLeaveSummary($user, $year)
+    {
+        $leaves = $user->leaves()->whereYear('start_date', $year)->get();
+        
+        $summary = [
+            'vacation' => [
+                'quota' => $user->vacation_quota ?? 0,
+                'approved' => 0,
+                'pending' => 0,
+                'remain' => 0
+            ],
+            'personal' => [
+                'quota' => $user->vacation_quota ?? 0, // Using same quota as vacation
+                'approved' => 0,
+                'pending' => 0,
+                'remain' => 0
+            ],
+            'sick' => [
+                'quota' => 6, // 6 days for regular sick leave
+                'approved' => 0,
+                'pending' => 0,
+                'remain' => 0
+            ],
+            'sick_with_certificate' => [
+                'quota' => 30, // 30 days for sick leave with certificate
+                'approved' => 0,
+                'pending' => 0,
+                'remain' => 0
+            ]
+        ];
+        
+        // Calculate used days for each type
+        foreach ($leaves as $leave) {
+            $type = $leave->type;
+            if (isset($summary[$type])) {
+                if ($leave->status === 'approved') {
+                    $summary[$type]['approved'] += $leave->days;
+                } elseif ($leave->status === 'pending') {
+                    $summary[$type]['pending'] += $leave->days;
+                }
+            }
+        }
+        
+        // For vacation and personal, calculate combined usage against shared quota
+        $combinedQuota = $user->vacation_quota ?? 0;
+        $vacationUsed = $summary['vacation']['approved'] + $summary['vacation']['pending'];
+        $personalUsed = $summary['personal']['approved'] + $summary['personal']['pending'];
+        $totalUsed = $vacationUsed + $personalUsed;
+        
+        // Update remaining days for vacation and personal (shared quota)
+        $totalRemaining = max(0, $combinedQuota - $totalUsed);
+        $summary['vacation']['remain'] = $totalRemaining;
+        $summary['personal']['remain'] = $totalRemaining;
+        
+        // Calculate remaining days for sick leaves (separate quotas)
+        $summary['sick']['remain'] = max(0, $summary['sick']['quota'] - $summary['sick']['approved'] - $summary['sick']['pending']);
+        $summary['sick_with_certificate']['remain'] = max(0, $summary['sick_with_certificate']['quota'] - $summary['sick_with_certificate']['approved'] - $summary['sick_with_certificate']['pending']);
+        
+        return $summary;
     }
 
     public function updateProfile(Request $request)
@@ -135,6 +212,7 @@ class UserController extends Controller
 
         $request->validate([
             'name' => 'required|string|max:255',
+            'nickname' => 'nullable|string|max:100',
             'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
             'password' => 'nullable|string|min:8|confirmed',
             'phone' => 'nullable|string|max:20',
