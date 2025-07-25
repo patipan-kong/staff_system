@@ -53,11 +53,15 @@ class Leave extends Model
     public function calculateDays()
     {
         if (!$this->start_date || !$this->end_date) {
-            return 0;
+            return '0';
         }
 
-        $start = Carbon::parse($this->start_date);
-        $end = Carbon::parse($this->end_date);
+        // Get the raw attributes to access original string values
+        $startDate = $this->getOriginal('start_date') ?: $this->start_date;
+        $endDate = $this->getOriginal('end_date') ?: $this->end_date;
+        
+        $start = Carbon::parse($startDate);
+        $end = Carbon::parse($endDate);
         
         $days = 0;
         while ($start->lte($end)) {
@@ -67,7 +71,7 @@ class Leave extends Model
             $start->addDay();
         }
         
-        return $days;
+        return (string) $days;
     }
 
     public function getTypeLabel()

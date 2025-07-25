@@ -59,7 +59,7 @@ class Timesheet extends Model
     public static function hasOverlap($userId, $date, $startTime, $endTime, $excludeId = null)
     {
         $query = self::where('user_id', $userId)
-            ->whereDate('date', $date)
+            ->where('date', $date)
             ->where(function ($q) use ($startTime, $endTime) {
                 // Check for any overlap: new start is before existing end AND new end is after existing start
                 $q->where(function ($subQ) use ($startTime, $endTime) {

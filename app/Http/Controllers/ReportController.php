@@ -178,14 +178,14 @@ class ReportController extends Controller
                     'project_name' => $ts->project->name ?? 'Unknown',
                     'group_name' => $ts->project->groupProject->name ?? null,
                     'group_color' => $ts->project->groupProject->color ?? '#6c757d',
-                    'start_time' => $ts->start_time,
-                    'end_time' => $ts->end_time,
+                    'start_time' => date('H:i', strtotime($ts->start_time)),
+                    'end_time' => date('H:i', strtotime($ts->end_time)),
                     'break_duration' => $ts->break_minutes,
-                    'worked_hours' => $ts->getWorkedHours(),
+                    'worked_hours' => number_format($ts->getWorkedHours(), 1),
                     'description' => $ts->description
                 ];
             }),
-            'total_hours' => round($totalHours, 2)
+            'total_hours' => number_format($totalHours, 1)
         ]);
     }
 }

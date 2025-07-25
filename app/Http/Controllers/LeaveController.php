@@ -41,7 +41,7 @@ class LeaveController extends Controller
         $data['status'] = Leave::STATUS_PENDING;
 
         $leave = new Leave($data);
-        $leave->days = $leave->calculateDays();
+        $data['days'] = $leave->calculateDays();
 
         if ($request->hasFile('medical_certificate')) {
             $data['medical_certificate'] = $request->file('medical_certificate')
@@ -83,8 +83,8 @@ class LeaveController extends Controller
         ]);
 
         $data = $request->all();
+        $data['days'] = $leave->calculateDays();
         $leave->fill($data);
-        $leave->days = $leave->calculateDays();
 
         if ($request->hasFile('medical_certificate')) {
             if ($leave->medical_certificate) {
