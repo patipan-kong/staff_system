@@ -42,7 +42,7 @@
                         <h6 class="text-muted mb-2">Employee</h6>
                         <div class="d-flex align-items-center">
                             @if($timesheet->user->photo)
-                                <img src="{{ Storage::url($timesheet->user->photo) }}" alt="Profile" class="rounded-circle me-2" width="24" height="24">
+                                <img src="{{ asset(Storage::url($timesheet->user->photo)) }}" alt="Profile" class="rounded-circle me-2" width="24" height="24">
                             @else
                                 <i class="fas fa-user-circle me-2"></i>
                             @endif
@@ -101,7 +101,7 @@
                                     <small class="text-muted">Click to view attachment</small>
                                 </div>
                             </div>
-                            <a href="{{ Storage::url($timesheet->attachment) }}" target="_blank" class="btn btn-outline-primary">
+                            <a href="{{ asset(Storage::url($timesheet->attachment)) }}" target="_blank" class="btn btn-outline-primary">
                                 <i class="fas fa-external-link-alt"></i> View
                             </a>
                         </div>

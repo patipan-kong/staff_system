@@ -55,7 +55,7 @@
                             <label class="form-label">Employee</label>
                             <div class="form-control-plaintext d-flex align-items-center">
                                 @if($leave->user->photo ?? false)
-                                    <img src="{{ Storage::url($leave->user->photo) }}" alt="Profile" class="rounded-circle me-2" width="32" height="32">
+                                    <img src="{{ asset(Storage::url($leave->user->photo)) }}" alt="Profile" class="rounded-circle me-2" width="32" height="32">
                                 @else
                                     <i class="fas fa-user-circle fa-lg me-2 text-muted"></i>
                                 @endif
@@ -101,7 +101,7 @@
                             <div class="mb-2">
                                 <div class="alert alert-info">
                                     <i class="fas fa-file-medical"></i> Current certificate: 
-                                    <a href="{{ Storage::url($leave->medical_certificate) }}" target="_blank" class="alert-link">
+                                    <a href="{{ asset(Storage::url($leave->medical_certificate)) }}" target="_blank" class="alert-link">
                                         View Current Document
                                     </a>
                                 </div>

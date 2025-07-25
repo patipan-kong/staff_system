@@ -38,7 +38,7 @@
                             <label class="form-label">Employee</label>
                             <div class="form-control-plaintext d-flex align-items-center">
                                 @if(auth()->user()->photo)
-                                    <img src="{{ Storage::url(auth()->user()->photo) }}" alt="Profile" class="rounded-circle me-2" width="32" height="32">
+                                    <img src="{{ asset(Storage::url(auth()->user()->photo)) }}" alt="Profile" class="rounded-circle me-2" width="32" height="32">
                                 @else
                                     <i class="fas fa-user-circle fa-lg me-2 text-muted"></i>
                                 @endif

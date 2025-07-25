@@ -12,7 +12,7 @@
         <div class="card">
             <div class="card-body text-center">
                 @if(auth()->user()->photo)
-                    <img src="{{ Storage::url(auth()->user()->photo) }}" alt="Profile" class="rounded-circle mb-3" width="120" height="120">
+                    <img src="{{ asset(Storage::url(auth()->user()->photo)) }}" alt="Profile" class="rounded-circle mb-3" width="120" height="120">
                 @else
                     <div class="rounded-circle bg-secondary d-flex align-items-center justify-content-center mx-auto mb-3" style="width: 120px; height: 120px;">
                         <i class="fas fa-user fa-3x text-white"></i>

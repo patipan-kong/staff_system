@@ -51,7 +51,7 @@
                         <h6 class="text-muted mb-2">Employee</h6>
                         <div class="d-flex align-items-center">
                             @if($leave->user->photo ?? false)
-                                <img src="{{ Storage::url($leave->user->photo) }}" alt="Profile" class="rounded-circle me-3" width="40" height="40">
+                                <img src="{{ asset(Storage::url($leave->user->photo)) }}" alt="Profile" class="rounded-circle me-3" width="40" height="40">
                             @else
                                 <div class="rounded-circle bg-secondary d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px;">
                                     <i class="fas fa-user text-white"></i>
@@ -144,7 +144,7 @@
                                     </a>
                                 @endcan
                                 @can('downloadMedicalCertificate', $leave)
-                                    <a href="{{ Storage::url($leave->medical_certificate) }}" target="_blank" class="btn btn-outline-success">
+                                    <a href="{{ asset(Storage::url($leave->medical_certificate)) }}" target="_blank" class="btn btn-outline-success">
                                         <i class="fas fa-external-link-alt"></i> View
                                     </a>
                                 @endcan
@@ -161,7 +161,7 @@
                         <div class="card-body">
                             <div class="d-flex align-items-center">
                                 @if($leave->approvedBy->photo ?? false)
-                                    <img src="{{ Storage::url($leave->approvedBy->photo) }}" alt="Profile" class="rounded-circle me-3" width="32" height="32">
+                                    <img src="{{ asset(Storage::url($leave->approvedBy->photo)) }}" alt="Profile" class="rounded-circle me-3" width="32" height="32">
                                 @else
                                     <i class="fas fa-user-circle fa-lg me-3 text-muted"></i>
                                 @endif

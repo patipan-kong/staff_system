@@ -176,7 +176,7 @@
                         @if($user->photo)
                             <div class="mt-2">
                                 <small class="text-muted">Current photo:</small><br>
-                                <img src="{{ Storage::url($user->photo) }}" alt="Current Photo" class="img-thumbnail" width="100">
+                                <img src="{{ asset(Storage::url($user->photo)) }}" alt="Current Photo" class="img-thumbnail" width="100">
                             </div>
                         @endif
                     </div>

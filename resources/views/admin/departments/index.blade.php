@@ -39,7 +39,7 @@
                                             @if($department->manager)
                                                 <div class="d-flex align-items-center">
                                                     @if($department->manager->photo)
-                                                        <img src="{{ Storage::url($department->manager->photo) }}" 
+                                                        <img src="{{ asset(Storage::url($department->manager->photo)) }}" 
                                                              alt="Manager" class="rounded-circle me-2" width="30" height="30">
                                                     @else
                                                         <div class="rounded-circle bg-secondary d-flex align-items-center justify-content-center me-2" 

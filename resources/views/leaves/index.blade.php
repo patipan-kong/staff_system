@@ -32,7 +32,7 @@
                             <td>
                                 <div class="d-flex align-items-center">
                                     @if($leave->user->photo)
-                                        <img src="{{ Storage::url($leave->user->photo) }}" alt="Profile" class="rounded-circle me-2" width="32" height="32">
+                                        <img src="{{ asset(Storage::url($leave->user->photo)) }}" alt="Profile" class="rounded-circle me-2" width="32" height="32">
                                     @else
                                         <i class="fas fa-user-circle fa-lg me-2 text-muted"></i>
                                     @endif

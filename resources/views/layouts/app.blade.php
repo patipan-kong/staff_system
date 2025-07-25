@@ -90,7 +90,7 @@
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
                             @if(auth()->user()->photo)
-                                <img src="{{ Storage::url(auth()->user()->photo) }}" alt="Profile" class="rounded-circle" width="24" height="24">
+                                <img src="{{ asset(Storage::url(auth()->user()->photo)) }}" alt="Profile" class="rounded-circle" width="24" height="24">
                             @else
                                 <i class="fas fa-user-circle"></i>
                             @endif

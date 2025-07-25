@@ -108,7 +108,7 @@
                             <div class="mb-2">
                                 <div class="alert alert-info">
                                     <i class="fas fa-paperclip"></i> Current attachment: 
-                                    <a href="{{ Storage::url($timesheet->attachment) }}" target="_blank" class="alert-link">
+                                    <a href="{{ asset(Storage::url($timesheet->attachment)) }}" target="_blank" class="alert-link">
                                         View Current File
                                     </a>
                                 </div>

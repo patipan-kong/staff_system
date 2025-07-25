@@ -80,7 +80,7 @@
                             <div class="d-flex flex-wrap gap-1">
                                 @foreach($project->users->take(3) as $user)
                                     @if($user->photo)
-                                        <img src="{{ Storage::url($user->photo) }}" 
+                                        <img src="{{ asset(Storage::url($user->photo)) }}" 
                                              alt="{{ $user->name }}" 
                                              class="rounded-circle" 
                                              width="24" height="24"

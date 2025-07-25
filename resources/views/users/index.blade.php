@@ -19,7 +19,7 @@
             <div class="card h-100">
                 <div class="card-body text-center">
                     @if($user->photo ?? false)
-                        <img src="{{ Storage::url($user->photo) }}" alt="Profile" class="rounded-circle mb-3" width="80" height="80">
+                        <img src="{{ asset(Storage::url($user->photo)) }}" alt="Profile" class="rounded-circle mb-3" width="80" height="80">
                     @else
                         <div class="rounded-circle bg-secondary d-flex align-items-center justify-content-center mx-auto mb-3" style="width: 80px; height: 80px;">
                             <i class="fas fa-user fa-2x text-white"></i>

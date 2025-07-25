@@ -193,7 +193,7 @@
                                                            {{ in_array($user->id, old('assigned_users', $assignedUsers)) ? 'checked' : '' }}>
                                                     <label class="form-check-label d-flex align-items-center" for="user_{{ $user->id }}">
                                                         @if($user->photo)
-                                                            <img src="{{ Storage::url($user->photo) }}" alt="Profile" class="rounded-circle me-2" width="24" height="24">
+                                                            <img src="{{ asset(Storage::url($user->photo)) }}" alt="Profile" class="rounded-circle me-2" width="24" height="24">
                                                         @else
                                                             <i class="fas fa-user-circle me-2"></i>
                                                         @endif

@@ -76,7 +76,7 @@
                             <td class="align-middle" style="position: sticky; left: 0; background: white; z-index: 5;">
                                 <div class="d-flex align-items-center">
                                     @if($user->photo)
-                                        <img src="{{ Storage::url($user->photo) }}" 
+                                        <img src="{{ asset(Storage::url($user->photo)) }}" 
                                              alt="{{ $user->name }}" 
                                              class="rounded-circle me-2" 
                                              width="32" height="32">

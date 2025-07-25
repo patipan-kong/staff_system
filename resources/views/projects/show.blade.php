@@ -127,7 +127,7 @@
                             <div class="card-body p-3">
                                 <div class="d-flex align-items-center">
                                     @if($assignment->user->photo)
-                                        <img src="{{ Storage::url($assignment->user->photo) }}" alt="Profile" class="rounded-circle me-3" width="40" height="40">
+                                        <img src="{{ asset(Storage::url($assignment->user->photo)) }}" alt="Profile" class="rounded-circle me-3" width="40" height="40">
                                     @else
                                         <div class="rounded-circle bg-secondary d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px;">
                                             <i class="fas fa-user text-white"></i>
@@ -187,7 +187,7 @@
                                 <td>
                                     <div class="d-flex align-items-center">
                                         @if($timesheet->user->photo)
-                                            <img src="{{ Storage::url($timesheet->user->photo) }}" alt="Profile" class="rounded-circle me-2" width="24" height="24">
+                                            <img src="{{ asset(Storage::url($timesheet->user->photo)) }}" alt="Profile" class="rounded-circle me-2" width="24" height="24">
                                         @else
                                             <i class="fas fa-user-circle me-2"></i>
                                         @endif
