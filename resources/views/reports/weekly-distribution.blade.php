@@ -42,7 +42,7 @@
         <div class="card bg-primary text-white stats-card">
             <div class="card-body">
                 <h5><i class="fas fa-clock"></i> Total Hours</h5>
-                <h2>{{ number_format($weeklyStats['total_hours'], 1) }}</h2>
+                <h2>{{ number_format($weeklyStats['total_hours'], 2) }}</h2>
             </div>
         </div>
     </div>
@@ -148,7 +148,7 @@
                                                 </div>
                                             @elseif($userTimesheets->count() > 0)
                                                 <div class="d-flex flex-column h-100 justify-content-center">
-                                                    <div class="fw-bold text-success">{{ number_format($totalHours, 1) }}h</div>
+                                                    <div class="fw-bold text-success">{{ number_format($totalHours, 2) }}h</div>
                                                     <small class="text-muted">{{ $userTimesheets->count() }} entries</small>
                                                     
                                                     <!-- Project indicators -->
@@ -202,7 +202,7 @@
                         <div class="col-md-6 mb-3">
                             <div class="d-flex justify-content-between align-items-center mb-1">
                                 <span class="text-truncate me-2">{{ $projectName }}</span>
-                                <span class="fw-bold">{{ number_format($hours, 1) }}h</span>
+                                <span class="fw-bold">{{ number_format($hours, 2) }}h</span>
                             </div>
                             <div class="progress" style="height: 20px;">
                                 <div class="progress-bar" role="progressbar" style="width: {{ $percentage }}%">

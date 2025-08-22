@@ -58,7 +58,7 @@
                             $badgeClass = $totalHours > 8 ? 'bg-success' : ($totalHours > 4 ? 'bg-warning' : 'bg-secondary');
                         @endphp
                         <div class="badge {{ $badgeClass }}">
-                            {{ number_format($totalHours, 1) }}h
+                            {{ number_format($totalHours, 2) }}h
                         </div>
                         <div class="small text-muted">total</div>
                     </div>
@@ -84,7 +84,7 @@
                                 <i class="fas fa-calendar-minus"></i> Yesterday ({{ $yesterday->format('M j') }})
                             </h6>
                             <span class="badge bg-secondary">
-                                {{ number_format($user->yesterdayHours, 1) }}h
+                                {{ number_format($user->yesterdayHours, 2) }}h
                             </span>
                         </div>
                     </div>
@@ -104,7 +104,7 @@
                                 </div>
                                 <div class="text-end">
                                     <span class="badge bg-primary">
-                                        {{ number_format($timesheet->getWorkedHours(), 1) }}h
+                                        {{ number_format($timesheet->getWorkedHours(), 2) }}h
                                     </span>
                                 </div>
                             </div>
@@ -126,7 +126,7 @@
                                 <i class="fas fa-calendar-day"></i> Today ({{ $today->format('M j') }})
                             </h6>
                             <span class="badge bg-light text-dark">
-                                {{ number_format($user->todayHours, 1) }}h
+                                {{ number_format($user->todayHours, 2) }}h
                             </span>
                         </div>
                     </div>
@@ -150,7 +150,7 @@
                                 <div class="text-end">
                                     @if($timesheet->end_time)
                                         <span class="badge bg-success">
-                                            {{ number_format($timesheet->getWorkedHours(), 1) }}h
+                                            {{ number_format($timesheet->getWorkedHours(), 2) }}h
                                         </span>
                                     @else
                                         @php
@@ -161,7 +161,7 @@
                                             $currentHours = max(0, ($minutesWorked - $breakMinutes) / 60);
                                         @endphp
                                         <span class="badge bg-warning text-dark">
-                                            {{ number_format($currentHours, 1) }}h
+                                            {{ number_format($currentHours, 2) }}h
                                         </span>
                                     @endif
                                 </div>
@@ -232,11 +232,11 @@
                         <small>Active Today</small>
                     </div>
                     <div class="col-md-3">
-                        <h4>{{ number_format($users->sum('todayHours'), 1) }}h</h4>
+                        <h4>{{ number_format($users->sum('todayHours'), 2) }}h</h4>
                         <small>Total Hours Today</small>
                     </div>
                     <div class="col-md-3">
-                        <h4>{{ number_format($users->sum('yesterdayHours'), 1) }}h</h4>
+                        <h4>{{ number_format($users->sum('yesterdayHours'), 2) }}h</h4>
                         <small>Total Hours Yesterday</small>
                     </div>
                 </div>

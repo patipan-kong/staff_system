@@ -63,7 +63,7 @@
                         <div class="row text-center mb-3">
                             <div class="col-6">
                                 <div class="border-end">
-                                    <h6 class="mb-0 text-primary">{{ number_format($totalHours, 1) }}h</h6>
+                                    <h6 class="mb-0 text-primary">{{ number_format($totalHours, 2) }}h</h6>
                                     <small class="text-muted">Logged</small>
                                 </div>
                             </div>

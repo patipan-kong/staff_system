@@ -37,9 +37,6 @@ Route::get('/storage/{path}', [ImageController::class, 'serveFile'])->where('pat
 Route::middleware(['auth', 'admin'])->group(function () {
     // User Management (create, edit, update, delete)
     Route::get('/users/create', [UserController::class, 'create'])->name('users.create');
-    Route::post('/users', [UserController::class, 'store'])->name('users.store');
-    Route::get('/users/{user}/edit', [UserController::class, 'edit'])->name('users.edit');
-    Route::put('/users/{user}', [UserController::class, 'update'])->name('users.update');
     Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
     
     // System Administration Routes
@@ -61,6 +58,11 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::delete('/admin/holidays/{holiday}', [CompanyHolidayController::class, 'destroy'])->name('admin.holidays.destroy');
     // Route::resource('admin/holidays', CompanyHolidayController::class)->except(['index']);
     
+    
+});
+
+// Manager/Admin Routes (Role 2+)
+Route::middleware(['auth', 'manager_or_admin'])->group(function () {
     // Group Projects Management
     Route::get('/admin/group-projects', [GroupProjectController::class, 'index'])->name('admin.group-projects.index');
     Route::get('/admin/group-projects/create', [GroupProjectController::class, 'create'])->name('admin.group-projects.create');
@@ -69,11 +71,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/admin/group-projects/{group_project}/edit', [GroupProjectController::class, 'edit'])->name('admin.group-projects.edit');
     Route::put('/admin/group-projects/{group_project}/update', [GroupProjectController::class, 'update'])->name('admin.group-projects.update');
     Route::delete('/admin/group-projects/{group_project}', [GroupProjectController::class, 'destroy'])->name('admin.group-projects.destroy');
-    
-});
 
-// Manager/Admin Routes (Role 2+)
-Route::middleware(['auth', 'manager_or_admin'])->group(function () {
     // Project Management
     Route::resource('projects', ProjectController::class)->except(['index', 'show']);
     
@@ -99,7 +97,10 @@ Route::middleware(['auth', 'staff'])->group(function () {
     // Profile Management
     Route::get('/profile', [UserController::class, 'profile'])->name('profile');
     Route::put('/profile', [UserController::class, 'updateProfile'])->name('profile.update');
-    
+    Route::post('/users', [UserController::class, 'store'])->name('users.store');
+    Route::get('/users/{user}/edit', [UserController::class, 'edit'])->name('users.edit');
+    Route::put('/users/{user}', [UserController::class, 'update'])->name('users.update');
+
     // Timesheets
     Route::resource('timesheets', TimesheetController::class);
     

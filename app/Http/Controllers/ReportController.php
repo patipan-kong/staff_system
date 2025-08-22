@@ -181,11 +181,11 @@ class ReportController extends Controller
                     'start_time' => date('H:i', strtotime($ts->start_time)),
                     'end_time' => date('H:i', strtotime($ts->end_time)),
                     'break_duration' => $ts->break_minutes,
-                    'worked_hours' => number_format($ts->getWorkedHours(), 1),
+                    'worked_hours' => number_format($ts->getWorkedHours(), 2),
                     'description' => $ts->description
                 ];
             }),
-            'total_hours' => number_format($totalHours, 1)
+            'total_hours' => number_format($totalHours, 2)
         ]);
     }
 }

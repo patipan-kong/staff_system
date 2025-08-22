@@ -215,7 +215,7 @@
             <div class="card-body">
                 <div class="row text-center">
                     <div class="col-4 border-end">
-                        <h4 class="text-primary mb-0">{{ number_format($totalHours, 1) }}</h4>
+                        <h4 class="text-primary mb-0">{{ number_format($totalHours, 2) }}</h4>
                         <small class="text-muted">Hours Logged</small>
                     </div>
                     <div class="col-4 border-end">
@@ -223,7 +223,7 @@
                         <small class="text-muted">Project Est.</small>
                     </div>
                     <div class="col-4">
-                        <h4 class="text-success mb-0">{{ number_format($project->getTotalEstimatedHours(), 1) }}</h4>
+                        <h4 class="text-success mb-0">{{ number_format($project->getTotalEstimatedHours(), 2) }}</h4>
                         <small class="text-muted">Team Est.</small>
                     </div>
                 </div>

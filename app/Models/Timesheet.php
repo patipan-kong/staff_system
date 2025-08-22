@@ -49,8 +49,8 @@ class Timesheet extends Model
         $end = Carbon::parse($this->end_time);
         $totalMinutes = $end->diffInMinutes($start);
         $breakMinutes = $this->break_minutes ?? 0;
-        
-        return ($totalMinutes - $breakMinutes) / 60;
+
+        return round(($totalMinutes - $breakMinutes) / 60, 2);
     }
 
     /**

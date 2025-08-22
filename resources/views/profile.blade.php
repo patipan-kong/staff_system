@@ -112,7 +112,7 @@
                                 ->get()
                                 ->sum(function($ts) { return $ts->getWorkedHours(); });
                         @endphp
-                        <h3>{{ number_format($thisMonthHours, 1) }}</h3>
+                        <h3>{{ number_format($thisMonthHours, 2) }}</h3>
                         <p class="mb-0">Hours This Month</p>
                     </div>
                 </div>

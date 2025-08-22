@@ -261,7 +261,7 @@
                         <div class="alert alert-info">
                             <i class="fas fa-info-circle"></i>
                             <strong>Note:</strong> This project has {{ $project->timesheets->count() }} logged time entries 
-                            totaling {{ number_format($totalHours, 1) }} hours. Deleting this project will also remove all associated time logs.
+                            totaling {{ number_format($totalHours, 2) }} hours. Deleting this project will also remove all associated time logs.
                         </div>
                     @endif
 

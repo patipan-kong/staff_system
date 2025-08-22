@@ -88,11 +88,11 @@
                         <div class="row text-center">
                             <div class="col-6 mb-2">
                                 <small class="text-muted d-block">Estimated Hours</small>
-                                <strong>{{ number_format($totalEstimatedHours, 1) }}h</strong>
+                                <strong>{{ number_format($totalEstimatedHours, 2) }}h</strong>
                             </div>
                             <div class="col-6 mb-2">
                                 <small class="text-muted d-block">Actual Hours</small>
-                                <strong>{{ number_format($totalActualHours, 1) }}h</strong>
+                                <strong>{{ number_format($totalActualHours, 2) }}h</strong>
                             </div>
                             <div class="col-6">
                                 <small class="text-muted d-block">Total Budget</small>

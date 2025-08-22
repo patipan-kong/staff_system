@@ -69,13 +69,13 @@
                                 <li><a class="dropdown-item" href="{{ route('staff-planning.index') }}">
                                     <i class="fas fa-calendar-alt"></i> Staff Planning
                                 </a></li>
+                                <li><a class="dropdown-item" href="{{ route('admin.group-projects.index') }}">
+                                        <i class="fas fa-layer-group"></i> Group Projects
+                                </a></li>
                                 @if(auth()->user()->isAdmin())
                                     <li><hr class="dropdown-divider"></li>
                                     <li><a class="dropdown-item" href="{{ route('admin.departments.index') }}">
                                         <i class="fas fa-building"></i> Departments
-                                    </a></li>
-                                    <li><a class="dropdown-item" href="{{ route('admin.group-projects.index') }}">
-                                        <i class="fas fa-layer-group"></i> Group Projects
                                     </a></li>
                                     <li><a class="dropdown-item" href="{{ route('admin.holidays.index') }}">
                                         <i class="fas fa-calendar"></i> Holidays
